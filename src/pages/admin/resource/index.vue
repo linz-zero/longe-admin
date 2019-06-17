@@ -222,7 +222,7 @@
         setTimeout(() => {
           this.$refs.editForm.resetFields();
           this.editForm.selectOption = [];
-          if (data.pId == 0) {
+          if (data.pid == 0) {
             this.editForm.selectOption.push(data.id);
           } else {
             this.editForm.selectOption = data.parentPath.split(',');
@@ -236,7 +236,6 @@
       },
       edit(data) {
         this.getMenus();
-        this.editForm.id = data.id;
         this.editForm.show = true;
         setTimeout(() => {
           this.$refs.editForm.clearValidate();
@@ -250,7 +249,8 @@
         }).then(ress => {
           this.editForm.selectOption = ['0'];
           if (ress.success) {
-            this.editForm.name = ress.data.resource.name;
+            this.editForm.id = id;
+						this.editForm.name = ress.data.resource.name;
             this.editForm.seq = ress.data.resource.seq;
             this.editForm.permission = ress.data.resource.permission;
             this.editForm.confirm_permission = ress.data.resource.permission;
