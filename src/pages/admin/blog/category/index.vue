@@ -33,7 +33,7 @@
                 <div slot="empty">{{tableData.emptyText}}</div>
                 <el-table-column label="序号" fixed="left" type="index" :index="indexMethod" align="center"
                                  width="65"></el-table-column>
-                                    <el-table-column label="分类名称" align="center">
+                    <el-table-column label="分类名称" align="center">
                         <template slot-scope="scope">
                             <span>{{ scope.row.name }}</span>
                         </template>
@@ -44,6 +44,11 @@
 							<span v-else>不显示</span>
                         </template>
                     </el-table-column>
+					<el-table-column label="排序" align="center">
+					    <template slot-scope="scope">
+					        <span>{{ scope.row.seq }}</span>
+					    </template>
+					</el-table-column>
                 <el-table-column label="操作" align="center" width="300px" class-name="small-padding fixed-width">
                     <template slot-scope="scope">
                         <el-button type="primary" size="mini" icon="el-icon-edit" @click="handleUpdate(scope.row)">编辑</el-button>
@@ -71,6 +76,13 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
+				<el-row>
+				    <el-col :span="24">
+						<el-form-item label="排序:" prop="seq">
+						  <el-input-number v-model="editForm.seq" :min="0" :max="999" label="请输入排序"></el-input-number>
+						</el-form-item>
+					</el-col>
+				</el-row>
                 <el-row>
                 	<el-col :span="24">
                 		<el-form-item label="是否显示:" prop="isShow" label-width="100px">
@@ -119,6 +131,7 @@
                     id: '',
                     name: '',
 					nowName: '',
+					seq: '',
                     isShow:true,
 					rules: {
 						name: [{
@@ -199,6 +212,7 @@
                     }
 					this.editForm.id = id;
                     this.editForm.name = res.data.category.name;
+					this.editForm.seq = res.data.category.seq;
                     this.editForm.isShow = res.data.category.isShow;
                 })
             },
@@ -227,6 +241,7 @@
                         edit({
                             id: this.editForm.id,
                             name: this.editForm.name,
+							seq: this.editForm.seq,
                             isShow: this.editForm.isShow,
                         }).then(res => {
                             if (!res.success) {
