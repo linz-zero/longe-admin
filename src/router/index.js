@@ -151,7 +151,7 @@ export const asyncRoutes = [
 // nestedRouter,
 // tableRouter,
 
-//{
+// {
 //  path: '/example',
 //  component: Layout,
 //  redirect: '/example/list',
@@ -181,7 +181,7 @@ export const asyncRoutes = [
 //      meta: { title: 'articleList', icon: 'list' }
 //    }
 //  ]
-//},
+// },
 //
 //{
 //  path: '/tab',

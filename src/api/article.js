@@ -2,8 +2,8 @@ import request from '@/utils/request'
 
 export function fetchList(query) {
   return request({
-    url: '/article/list',
-    method: 'get',
+    url: '/admin/role/page',
+    method: 'post',
     params: query
   })
 }

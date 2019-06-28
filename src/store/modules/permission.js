@@ -61,9 +61,10 @@ export function myAsyncRoutes(item, flag) {
       //一级路由配置
       if (!flag) {
         d.component = Layout
-        d.redirect = 'noRedirect'
+        d.redirect = items.redirect ? 'noRedirect': items.redirect
         d.alwaysShow = true
       }
+			d.hidden = items.isHidden
       //如果有子级并且url等于空，则递归获取子级
       if (!isNotNull(items.url) && items.children) {
         d.children = myAsyncRoutes(items.children, true)
@@ -119,7 +120,7 @@ const actions = {
       }
       resourceMenuTree().then(res => {
         if (res.success) {
-          //accessedRoutes.concat(myAsyncRoutes(res.data.menus))
+           //accessedRoutes = accessedRoutes.concat(myAsyncRoutes(res.data.menus, false))
           accessedRoutes = myAsyncRoutes(res.data.menus, false)
           console.log(accessedRoutes);
         }

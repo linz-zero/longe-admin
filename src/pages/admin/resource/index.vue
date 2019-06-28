@@ -19,14 +19,25 @@
     <!--搜索面板-->
 
     <el-table :data="tableData.item" v-loading="tableData.listLoading" style="width: 100%;" border row-key="id">
-      <el-table-column prop="label" label="名称" width="180">
-      </el-table-column>
-      <el-table-column prop="url" label="菜单URL" width="180">
-      </el-table-column>
+      <el-table-column prop="label" label="名称" width="180"></el-table-column>
+			<el-table-column label="前端路由" width="180">
+					<template slot-scope="scope">
+						<span>{{ scope.row.path }}</span>
+					</template>
+			</el-table-column>
+      <el-table-column prop="url" label="菜单URL" width="180"></el-table-column>
       <el-table-column prop="type" label="类型" width="180">
-      </el-table-column>
-      <el-table-column prop="icon" label="菜单图标" width="180">
-      </el-table-column>
+				<template slot-scope="scope">
+					<el-tag v-if = "scope.row.type='MENU'" class="el-icon-menu" type="success">菜单</el-tag>
+					<el-tag v-else-if="scope.row.type='BUTTON'" class="el-icon-star-off" type="danger" >按钮</el-tag>  
+				</template>
+			</el-table-column>
+      <el-table-column label="菜单图标" width="180">
+				<template slot-scope="scope">
+					<span v-if = "scope.row.icon" :class="scope.row.icon"></span>
+					<span v-else></span>
+				</template>
+			</el-table-column>
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button @click="add(scope.row)" type="success" size="mini" icon="el-icon-plus">添加</el-button>
@@ -88,17 +99,30 @@
         </el-row>
 
         <el-row :gutter="100">
+					<el-col :lg="12">
+					  <el-form-item label="URL:" prop="url">
+					    <el-input type="text" v-model="editForm.url" placeholder="请输入URL" auto-complete="off"></el-input>
+					  </el-form-item>
+					</el-col>
           <el-col :lg="12">
             <el-form-item label="权限标识:" prop="permission">
               <el-input type="text" v-model="editForm.permission" placeholder="请输入权限标识" auto-complete="off"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :lg="12">
-            <el-form-item label="URL:" prop="url">
-              <el-input type="text" v-model="editForm.url" placeholder="请输入URL" auto-complete="off"></el-input>
-            </el-form-item>
-          </el-col>
         </el-row>
+				
+				<el-row :gutter="100">
+					<el-col :lg="12">
+					  <el-form-item label="选中路径:" prop="redirect">
+							<el-input type="text" v-model="editForm.redirect" placeholder="请输入子路由选中路径" auto-complete="off"></el-input>
+					  </el-form-item>
+					</el-col>
+					<el-col :lg="12">
+					  <el-form-item label="是否隐藏:" prop="isHidden">
+					    <el-switch v-model="editForm.isHidden" active-text="是" inactive-text="否"/> 
+					  </el-form-item>
+					</el-col>
+				</el-row>
 
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -150,6 +174,8 @@
           parentId: '',
           selectOption: ['0'],
           value: [],
+					isHidden: false,
+					redirect: '',
           url: '',
           permission: '',//权限标识
           confirm_permission: '',
@@ -263,6 +289,8 @@
             }
             this.editForm.path = ress.data.resource.path;
             this.editForm.icon = ress.data.resource.icon;
+						this.editForm.isHidden = ress.data.resource.isHidden;
+						this.editForm.redirect = ress.data.resource.redirect;
           }
         });
       },
@@ -366,7 +394,9 @@
               seq: this.editForm.seq,
               parentPath: this.editForm.selectOption.join(','),
               path: this.editForm.path,
-              icon: this.editForm.icon
+              icon: this.editForm.icon,
+							isHidden: this.editForm.isHidden,
+							redirect: this.editForm.redirect
             }).then(res => {
               if (res.success) {
                 this.$notify({
@@ -392,3 +422,9 @@
     }
   }
 </script>
+
+<style scoped>
+	.el-form-item--small .el-form-item__content{
+		line-height: 1.875rem !important;
+	}
+</style>
